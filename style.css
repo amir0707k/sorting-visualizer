@@ -1,0 +1,126 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: #343A41;
+    font-family: 'Inter', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+}
+.main-container{
+    margin: 20px;
+    text-align: center;
+}
+h1{
+    font-size: 48px;
+}
+button{
+    padding: 10px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+}
+
+.options{
+    display: flex;
+    margin-top: 20px;
+    padding: 0px 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+.options-container{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.new-array{
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    color: rgb(61, 158, 182);
+    width: 100px;
+    height: 40px;
+    border: 1px solid rgb(61, 158, 182);
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out,box-shadow 0.3s ease-in-out;
+    font-weight: 700;
+}
+.new-array:hover{
+    width: 120px;
+    height: 60px;
+    box-shadow: 0px 0px 30px rgb(61, 158, 182);
+}
+.sorting-options{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
+.bars-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+}
+
+#bars{
+    margin-top: 20px;
+    display: flex;
+    height: 70vh;
+    width: 70vw;
+    gap: 5px;
+    flex-direction: row;
+    margin-inline: auto;
+}
+.sort-button {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    color: rgb(33, 107, 126);
+    font-weight: 700;
+    width: 100px;
+    height: 40px;
+    border: 1px solid rgb(33, 107, 126);
+    transition: width 0.3s ease-in-out, height 0.3s ease-in-out,box-shadow 0.3s ease-in-out;
+}
+.sort-button:hover{
+    width: 120px;
+    height: 60px;
+    box-shadow: 0px 0px 30px rgb(33, 107, 126);
+}
+
+input[type="range"].bars-slider,
+input[type="range"].speed-slider {
+    width: 100px; 
+    height: 5px; 
+    background: #ccc;
+    border-radius: 5px; 
+    outline: none; 
+    margin: 0; 
+}
+
+/* Style for the slider thumb/handle */
+input[type="range"].bars-slider::-webkit-slider-thumb,
+input[type="range"].speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; 
+    height: 16px;
+    background: #007BFF; 
+    border-radius: 50%; 
+    cursor: pointer;
+}
+
+.bars-num,.speed-of-sorting{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    --rotation: 10deg
 }
 body{
     background-color: #343A41;
@@ -69,7 +70,23 @@ button{
     justify-content: center;
     margin-inline: auto;
 }
-
+#volume_knob{
+    height: 80px;
+    width: 80px;
+    transition: transform 0.2s ease;
+}
+.volume-first{
+    transform: rotate(-30deg);
+}
+.volume-knob-controls{
+    display: flex;
+    align-items: center;
+}
+.volume-knob-controls button{
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+}
 #bars{
     margin-top: 20px;
     display: flex;

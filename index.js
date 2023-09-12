@@ -5,11 +5,51 @@ const newArrayButton = document.getElementById("new-array");
 const bubbleSortButton = document.getElementById("bubble-sort");
 const selectionSortButton = document.getElementById("selection-sort");
 const insertionSortButton = document.getElementById("insertion-sort");
+const quickSortButton = document.getElementById("quick-sort");
+const mergeSortButton = document.getElementById("merge-sort");
 let isSorted = false;
 let array = [];
 let timer = 400;
 let audioContext = null;
+let volume_knob = document.getElementById("volume_knob");
+let increaseVolume = document.getElementById("increase");
+let decreaseVolume = document.getElementById("decrease");
+let currentVolume = 0.016 ;
+let currentRotation = 0;
+
+decreaseVolume.addEventListener("click", () => {
+  if(currentRotation!== -30){
+    currentRotation -= 30;
+    volume_knob.style.transform = `rotate(${currentRotation}deg)`
+  }
+  console.log("decrease Volume clicked")
+  if( parseFloat(currentVolume.toFixed(3)) > 0.016){
+    currentVolume = currentVolume-0.016
+    currentVolume = parseFloat(currentVolume.toFixed(3));
+    console.log(currentVolume);
+  }else if (parseFloat(currentVolume.toFixed(3)) === 0.016) {
+    currentVolume = currentVolume - 0.016;
+    currentVolume = parseFloat(currentVolume.toFixed(3));
+    console.log(currentVolume);
+  } else {
+    return;
+  }
+  
+})
 initializeArray(10);
+
+increaseVolume.addEventListener("click", () => {
+  if(currentRotation!== 150){
+     currentRotation += 30;
+     volume_knob.style.transform = `rotate(${currentRotation}deg)`;
+  }
+  if (parseFloat(currentVolume.toFixed(3)) < 0.096) {
+    currentVolume = currentVolume + 0.016;
+    currentVolume = parseFloat(currentVolume.toFixed(3));
+    console.log(currentVolume);
+  }
+
+});
 
 newArrayButton.addEventListener("click", () => {
   array = [];
@@ -38,7 +78,9 @@ bubbleSortButton.addEventListener("click", () => {
 
 selectionSortButton.addEventListener("click", () => {
   if (!isSorted) {
+    disableAllInputs();
     const moves = selectionSort();
+    animate(moves);
     isSorted = true;
   } else {
     alreadySorted();
@@ -47,6 +89,7 @@ selectionSortButton.addEventListener("click", () => {
 
 insertionSortButton.addEventListener("click", () => {
   if (!isSorted) {
+    disableAllInputs();
     const moves = insertionSort();
     animate(moves);
     isSorted = true;
@@ -57,9 +100,17 @@ insertionSortButton.addEventListener("click", () => {
 
 function disableAllInputs() {
   numOfBars.disabled = true;
+  bubbleSortButton.disabled = true;
+  insertionSortButton.disabled = true;
+  quickSortButton.disabled = true;
+  mergeSortButton.disabled = true;
 }
 function enableAllInputs() {
   numOfBars.disabled = false;
+  bubbleSortButton.disabled = false;
+  insertionSortButton.disabled = false;
+  quickSortButton.disabled = false;
+  mergeSortButton.disabled = false;
 }
 
 speed.addEventListener("change", () => {
@@ -82,43 +133,58 @@ function animate(moves) {
   if (moves.length === 0) {
     enableAllInputs();
     animateBars();
+    animateAllBars();
     return;
   }
   let move = moves.shift();
-  let [i,j] = move.indices;
-  if(move.type == "swap"){
+  let [i, j] = move.indices;
+  if (move.type == "swap") {
     [array[j], array[i]] = [array[i], array[j]];
   }
-  
-  playSound(200 + array[i] * 500)
+
+  playSound(200 + array[i] * 500);
   playSound(200 + array[j] * 500);
   animateBars(move);
 
   setTimeout(() => {
     animate(moves);
   }, timer);
-  console.log(timer);
 }
 
-function playSound(frequency){
-  if(audioContext == null){
-    audioContext = new (
-      AudioContext || webkitAudioContext || window.webkitAudioContext
-    )();
+function playSound(frequency) {
+  if (audioContext == null) {
+    audioContext = new (AudioContext ||
+      webkitAudioContext ||
+      window.webkitAudioContext)();
   }
 
   const duration = 0.1;
   const oscillator = audioContext.createOscillator();
   oscillator.frequency.value = frequency;
   const volume = audioContext.createGain();
-  volume.gain.value = 0.05;
+  volume.gain.value = currentVolume;
   oscillator.connect(volume);
-  volume.connect(audioContext.destination)
+  oscillator.type = "sine";
+  volume.connect(audioContext.destination);
   oscillator.start();
-  oscillator.stop(audioContext.currentTime+duration)
-
+  oscillator.stop(audioContext.currentTime + duration);
 }
 
+function animateAllBars() {
+  barsContainer.innerHTML = "";
+  const n = array.length;
+  for (let i = 0; i < array.length; i++) {
+    const bar = document.createElement("div");
+    bar.style.height = array[i] * 100 + "%";
+    const barsWidth = 100 / n + "%";
+    bar.style.width = barsWidth;
+    bar.style.backgroundColor = "green";
+    barsContainer.appendChild(bar);
+    setTimeout(() => {
+      bar.style.backgroundColor = "black";
+    }, 1000);
+  }
+}
 function animateBars(move) {
   barsContainer.innerHTML = "";
   const n = array.length;
@@ -159,7 +225,6 @@ function generateBars() {
     const barsWidth = 100 / n + "%";
     bar.style.width = barsWidth;
     bar.setAttribute("id", i);
-    console.log(bar);
     bar.style.backgroundColor = "black";
     barsContainer.appendChild(bar);
   }
@@ -170,9 +235,9 @@ function bubbleSort() {
   const moves = [];
   for (let i = 0; i < duplicate.length; i++) {
     for (let j = 0; j < duplicate.length - i - 1; j++) {
-      moves.push({ indices: [j, j + 1] , type:"comparison"});
+      moves.push({ indices: [j, j + 1], type: "comparison" });
       if (duplicate[j] > duplicate[j + 1]) {
-        moves.push({ indices: [j, j + 1], type:"swap" });
+        moves.push({ indices: [j, j + 1], type: "swap" });
         let temp = duplicate[j];
         duplicate[j] = duplicate[j + 1];
         duplicate[j + 1] = temp;
@@ -183,15 +248,20 @@ function bubbleSort() {
 }
 
 function selectionSort() {
-  for (let i = 0; i < array.length - 1; i++) {
-    for (let j = i + 1; j < array.length; j++) {
-      if (array[i] > array[j]) {
-        let temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+  const duplicate = [...array];
+  const moves = [];
+  for (let i = 0; i < duplicate.length - 1; i++) {
+    for (let j = i + 1; j < duplicate.length; j++) {
+      moves.push({ indices: [i, j], type: "comparison" });
+      if (duplicate[i] > duplicate[j]) {
+        moves.push({ indices: [i, j], type: "swap" });
+        let temp = duplicate[i];
+        duplicate[i] = duplicate[j];
+        duplicate[j] = temp;
       }
     }
   }
+  return moves;
 }
 
 function insertionSort() {

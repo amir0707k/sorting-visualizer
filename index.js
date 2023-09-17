@@ -141,7 +141,7 @@ function animate(moves) {
   if (move.type == "swap") {
     [array[j], array[i]] = [array[i], array[j]];
   }
-
+  console.log([i,j])
   playSound(200 + array[i] * 500);
   playSound(200 + array[j] * 500);
   animateBars(move);
@@ -264,14 +264,26 @@ function selectionSort() {
   return moves;
 }
 
+function animateWithInsertionSort(){
+  
+}
+
 function insertionSort() {
-  for (let i = 1; i < array.length; i++) {
-    let curr = array[i];
+    const duplicate = [...array];
+    const moves = [];
+  for (let i = 1; i < duplicate.length; i++) {
+    let curr = duplicate[i];
     let j = i - 1;
-    while (j >= 0 && array[j] > curr) {
-      array[j + 1] = array[j];
+    
+    while (j >= 0 && duplicate[j] > curr) {
+      moves.push({ indices: [j + 1, j], type: "comparison" });
+      duplicate[j + 1] = duplicate[j];
+
+      moves.push({ indices: [j+1, j], type: "swap" });
       j--;
+
     }
-    array[j + 1] = curr;
+    duplicate[j + 1] = curr;
   }
+  return moves;
 }
